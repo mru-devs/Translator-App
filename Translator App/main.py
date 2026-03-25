@@ -1,10 +1,11 @@
 import easyocr
 from translate import Translator
 
+
 class functionTranslate:
     def __init__(self):
-        self.japaneseReader = easyocr.Reader(['ja'])
-        self.englishReader = easyocr.Reader(['en'])  
+        self.japaneseReader = easyocr.Reader(['ja'], gpu=True)
+        self.englishReader = easyocr.Reader(['en'], gpu=True)  
         self.translator = Translator(to_lang="en")
 
     def JapaneseToEnglish(self, path):
@@ -20,4 +21,5 @@ class functionTranslate:
 
 
 obj1 = functionTranslate()
-obj1.JapaneseToEnglish('Translator App\page3.png')
+obj1.JapaneseToEnglish('Translator App/page3.png')
+obj1.JapaneseToEnglish('Translator App/page2.png')
