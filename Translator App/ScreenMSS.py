@@ -1,16 +1,20 @@
 import mss
 
-region = {
-    "top": 200,
-    "left": 300,
-    "width": 400,
-    "height": 200
-}
+filePathName = "region.png"
+def ScreenShotter(x1,y1,x2,y2):
+    width = x2 - x1
+    height = y2 - y1
 
-with mss.mss() as sct:
-    screenshot = sct.grab(region)
+    region = {
+        "left": x1,
+        "top": y1,
+        "width": width,
+        "height": height
+    }
 
-    mss.tools.to_png(screenshot.rgb, screenshot.size, output="region.png")
+    with mss.mss() as sct:
+        screenshot = sct.grab(region)
+        mss.tools.to_png(screenshot.rgb, screenshot.size, output=filePathName)
 
 
 # Just testing so far

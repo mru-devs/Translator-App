@@ -12,14 +12,18 @@ class functionTranslate:
         readerOutput = self.japaneseReader.readtext(path, detail=0)
         readerOutput = " ".join(readerOutput)
         translation = self.translator.translate(readerOutput)
+
         print(translation)
+
+
 
     def KoreanToEnglish(self, path):
         pass
+
     def SwedishToEnglish(self, path):
         pass
 
 
-obj1 = functionTranslate()
-obj1.JapaneseToEnglish('Translator App/page3.png')
-obj1.JapaneseToEnglish('Translator App/page2.png')
+#obj1 = functionTranslate()
+#obj1.JapaneseToEnglish('Translator App/page3.png')
+#obj1.JapaneseToEnglish('Translator App/page2.png')

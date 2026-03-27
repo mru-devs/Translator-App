@@ -1,21 +1,56 @@
 from PySide6.QtWidgets import QApplication, QMainWindow, QLabel, QWidget, QVBoxLayout,QHBoxLayout, QPushButton
-from PySide6.QtCore import Qt
+from PySide6.QtCore import Qt, QRect
+from PySide6.QtGui import QPainter, QColor
 import numpy as np
 
+#import ScreenMSS
+#import main
 
 class SnippingMode(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
 
-        self.start = None
-        self.end = None
 
         self.setWindowFlags(Qt.FramelessWindowHint)
-        self.setWindowState(Qt.WindowFullScreen)
         self.setAttribute(Qt.WA_TranslucentBackground)
         self.setCursor(Qt.CrossCursor)
+        self.setWindowOpacity(0.5)
+        self.showFullScreen()
         
-    
+        self.positionStart = None
+        self.positionEnd = None
+
+    def mousePressEvent(self, event):
+        if event.button() == Qt.LeftButton:
+            self.positionStart = event.position().toPoint()
+            self.positionEnd = event.position().toPoint()
+            self.update()
+
+    def mouseMoveEvent(self, event):
+        if self.positionStart is not None:
+            self.positionEnd = event.position().toPoint()
+            self.update()
+
+    def mouseReleaseEvent(self, event):
+        if event.button() == Qt.LeftButton:
+            self.positionEnd = event.position().toPoint()
+            self.close()
+            #x1,y1,x2,y2 = QRect(self.positionStart, self.positionEnd).normalized().getCoords()
+            #ScreenMSS.ScreenShotter(x1,y1,x2,y2)
+
+            #appTranslate = main.functionTranslate()
+            #appTranslate.JapaneseToEnglish(ScreenMSS.filePathName)
+
+
+    def paintEvent(self, event):
+        draggedArea = QPainter(self)
+        draggedArea.fillRect(self.rect(), QColor(0, 0, 0, 100))
+        if self.positionStart is not None:
+            area = QRect(self.positionStart, self.positionEnd).normalized()
+            draggedArea.fillRect(area, QColor(255, 255, 255, 255))
+            draggedArea.setPen(Qt.green)
+            draggedArea.drawRect(area)
+
     
 
 class WindowWidget(QWidget):
@@ -44,7 +79,7 @@ class WindowWidget(QWidget):
 
     def startSnipping(self):
         self.snippingWindow = SnippingMode()
-        self.snippingWindow.show()
+        #self.snippingWindow.show()
 
 
 
