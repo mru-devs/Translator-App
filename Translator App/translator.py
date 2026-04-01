@@ -1,6 +1,5 @@
-import pytesseract
 from translate import Translator
-from PIL import Image
+import OCR
 
 
 class functionTranslate:
@@ -8,13 +7,11 @@ class functionTranslate:
         self.translator = Translator(to_lang="en")
 
     def JapaneseToEnglish(self, path):
-        image = Image.open(path)
-        readerOutput = pytesseract.image_to_string(image, lang='jpn')
-        #print(readerOutput)
-        readerOutput = " ".join(readerOutput)
-        translation = self.translator.translate(readerOutput)
-        print(translation)
-
+        extractedText = OCR.extractText(path)
+        if(extractedText != ""):
+            extractedText = " ".join(extractedText)
+            translatedText = self.translator.translate(extractedText)
+            print(translatedText)
 
 
     def KoreanToEnglish(self, path):

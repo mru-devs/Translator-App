@@ -1,10 +1,16 @@
 from PySide6.QtWidgets import QApplication, QMainWindow, QLabel, QWidget, QVBoxLayout,QHBoxLayout, QPushButton
 from PySide6.QtCore import Qt, QRect, QTimer
 from PySide6.QtGui import QPainter, QColor
-import numpy as np
+#import numpy as np
 
 import ScreenMSS
 import translator
+from UI_GUI import Ui_MainWindow
+
+class appSettings(QWidget):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+
 class SnippedArea(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -14,16 +20,15 @@ class SnippedArea(QWidget):
         self.setAttribute(Qt.WA_TranslucentBackground)
         self.setWindowOpacity(0.1)
         self.showFullScreen()
-    
         self.timer = QTimer()
         self.timer.timeout.connect(self.callMSS)
         self.timer.start(1000)
 
     def callMSS(self):
         x1,y1,x2,y2 = self.coordinates
-        ScreenMSS.ScreenShotter(x1,y1,x2,y2)
-        appTranslate = translator.functionTranslate()
-        appTranslate.JapaneseToEnglish(ScreenMSS.filePathName)
+        #ScreenMSS.ScreenShotter(x1,y1,x2,y2)
+        #appTranslate = translator.functionTranslate()
+        #appTranslate.JapaneseToEnglish(ScreenMSS.filePathName)
 
     def getCoords(self, area, coords):
         self.area = area
@@ -58,7 +63,6 @@ class SnippingMode(QWidget):
             self.snippedObject.deleteLater()
             self.snippedObject = None
 
-
     def mousePressEvent(self, event):
         if event.button() == Qt.LeftButton:
             self.positionStart = event.position().toPoint()
@@ -74,7 +78,6 @@ class SnippingMode(QWidget):
         if event.button() == Qt.LeftButton:
             self.positionEnd = event.position().toPoint()
             self.close()
-            
             self.snippedObject = SnippedArea()
             self.snippedObject.getCoords(self.area, QRect(self.positionStart, self.positionEnd).normalized().getCoords())
 
@@ -93,12 +96,12 @@ class WindowWidget(QWidget):
         super().__init__(parent)
         labelScreen2 = QLabel()
 
-        ScreenBarButton = QPushButton("✂ New")
-        ScreenBarButton.clicked.connect(self.startSnipping)
+        SnipButton = QPushButton("New Snip")
+        SnipButton.clicked.connect(self.startSnipping)
 
         menuWidget = QWidget()
         menuLayout = QHBoxLayout(menuWidget)
-        menuLayout.addWidget(ScreenBarButton, 1)
+        menuLayout.addWidget(SnipButton, 1)
         menuLayout.addWidget(labelScreen2, 10)
 
         temp = QLabel('Temporary text')
@@ -122,11 +125,21 @@ class WindowWidget(QWidget):
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
+        
+        self.GUI = Ui_MainWindow()
+        self.GUI.setupUi(self)
 
-        self.setWindowTitle('Main Window')
-        self.setFixedSize(800, 600)
+        self.GUI.SettingsButton.clicked.connect(self.settingsButton)
+        self.GUI.SnipButton.clicked.connect(self.snipButton)
 
-        self.setCentralWidget(WindowWidget())
+        self.snippingWidget = SnippingMode()
+
+    def snipButton(self):
+        self.snippingWidget.startWidget()
+
+    def settingsButton(self):
+        self.GUI.stackedWidget.setCurrentIndex(1)
+        print("Not yet")
 
         
 application = QApplication()
