@@ -1,7 +1,6 @@
 from PySide6.QtWidgets import QApplication, QMainWindow, QLabel, QWidget, QVBoxLayout,QHBoxLayout, QPushButton
 from PySide6.QtCore import Qt, QRect, QTimer
 from PySide6.QtGui import QPainter, QColor
-#import numpy as np
 
 import ScreenMSS
 import translator
@@ -26,9 +25,9 @@ class SnippedArea(QWidget):
 
     def callMSS(self):
         x1,y1,x2,y2 = self.coordinates
-        #ScreenMSS.ScreenShotter(x1,y1,x2,y2)
-        #appTranslate = translator.functionTranslate()
-        #appTranslate.JapaneseToEnglish(ScreenMSS.filePathName)
+        ScreenMSS.ScreenShotter(x1,y1,x2,y2)
+        appTranslate = translator.functionTranslate()
+        appTranslate.JapaneseToEnglish(ScreenMSS.filePathName)
 
     def getCoords(self, area, coords):
         self.area = area

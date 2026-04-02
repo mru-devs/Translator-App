@@ -1,4 +1,5 @@
 from google import genai
+import KEYAPI
 
 class LLM:
 
@@ -23,7 +24,7 @@ class LLM:
         language = text
     
 
-obj1 = LLM('####')
+obj1 = LLM(KEYAPI.KEY)
 
 
 
