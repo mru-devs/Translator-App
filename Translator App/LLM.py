@@ -23,7 +23,7 @@ class LLM:
         language = text
     
 
-obj1 = LLM('AIzaSyBxVzMBDOd_LKmVfUWrT_EfDFiPEkEiZhU')
+obj1 = LLM('####')
 
 
 
