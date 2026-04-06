@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'Gui.ui'
+## Form generated from reading UI file 'GUI.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.11.0
 ##
@@ -62,29 +62,30 @@ class Ui_MainWindow(object):
         self.stackedWidget_2.addWidget(self.page_3)
         self.page_4 = QWidget()
         self.page_4.setObjectName(u"page_4")
-        self.lineEdit = QLineEdit(self.page_4)
-        self.lineEdit.setObjectName(u"lineEdit")
-        self.lineEdit.setGeometry(QRect(100, 30, 113, 20))
-        self.label = QLabel(self.page_4)
-        self.label.setObjectName(u"label")
-        self.label.setGeometry(QRect(10, 30, 81, 21))
-        self.lineEdit_2 = QLineEdit(self.page_4)
-        self.lineEdit_2.setObjectName(u"lineEdit_2")
-        self.lineEdit_2.setGeometry(QRect(100, 0, 113, 20))
-        self.label_2 = QLabel(self.page_4)
-        self.label_2.setObjectName(u"label_2")
-        self.label_2.setGeometry(QRect(10, 0, 81, 21))
+        self.InsertValue_Frequency = QLineEdit(self.page_4)
+        self.InsertValue_Frequency.setObjectName(u"InsertValue_Frequency")
+        self.InsertValue_Frequency.setGeometry(QRect(100, 30, 113, 20))
+        self.label_APIFreq = QLabel(self.page_4)
+        self.label_APIFreq.setObjectName(u"label_APIFreq")
+        self.label_APIFreq.setGeometry(QRect(10, 30, 81, 21))
+        self.InsertValue_Key = QLineEdit(self.page_4)
+        self.InsertValue_Key.setObjectName(u"InsertValue_Key")
+        self.InsertValue_Key.setGeometry(QRect(100, 0, 113, 20))
+        self.InsertValue_Key.setClearButtonEnabled(False)
+        self.label_APIKey = QLabel(self.page_4)
+        self.label_APIKey.setObjectName(u"label_APIKey")
+        self.label_APIKey.setGeometry(QRect(10, 0, 81, 21))
         self.stackedWidget_2.addWidget(self.page_4)
-        self.buttonBox = QDialogButtonBox(self.page_2)
-        self.buttonBox.setObjectName(u"buttonBox")
-        self.buttonBox.setGeometry(QRect(50, 140, 156, 23))
-        self.buttonBox.setStandardButtons(QDialogButtonBox.Cancel|QDialogButtonBox.Ok)
-        self.radioButton = QRadioButton(self.page_2)
-        self.radioButton.setObjectName(u"radioButton")
-        self.radioButton.setGeometry(QRect(10, 10, 111, 17))
-        self.radioButton_2 = QRadioButton(self.page_2)
-        self.radioButton_2.setObjectName(u"radioButton_2")
-        self.radioButton_2.setGeometry(QRect(10, 40, 111, 17))
+        self.saveSettingsButtons = QDialogButtonBox(self.page_2)
+        self.saveSettingsButtons.setObjectName(u"saveSettingsButtons")
+        self.saveSettingsButtons.setGeometry(QRect(50, 140, 156, 23))
+        self.saveSettingsButtons.setStandardButtons(QDialogButtonBox.Cancel|QDialogButtonBox.Ok)
+        self.GoogleTranslateButton = QRadioButton(self.page_2)
+        self.GoogleTranslateButton.setObjectName(u"GoogleTranslateButton")
+        self.GoogleTranslateButton.setGeometry(QRect(10, 10, 111, 17))
+        self.GeminiButton = QRadioButton(self.page_2)
+        self.GeminiButton.setObjectName(u"GeminiButton")
+        self.GeminiButton.setGeometry(QRect(10, 40, 111, 17))
         self.stackedWidget.addWidget(self.page_2)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
@@ -97,7 +98,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.stackedWidget.setCurrentIndex(0)
+        self.stackedWidget.setCurrentIndex(1)
         self.stackedWidget_2.setCurrentIndex(1)
 
 
@@ -108,11 +109,13 @@ class Ui_MainWindow(object):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
         self.SnipButton.setText(QCoreApplication.translate("MainWindow", u"New Snip", None))
         self.SettingsButton.setText(QCoreApplication.translate("MainWindow", u"Settings", None))
-        self.lineEdit.setText(QCoreApplication.translate("MainWindow", u"Insert value...", None))
-        self.label.setText(QCoreApplication.translate("MainWindow", u"API Frequency:", None))
-        self.lineEdit_2.setText(QCoreApplication.translate("MainWindow", u"Insert value...", None))
-        self.label_2.setText(QCoreApplication.translate("MainWindow", u"API Key:", None))
-        self.radioButton.setText(QCoreApplication.translate("MainWindow", u"Google Translate", None))
-        self.radioButton_2.setText(QCoreApplication.translate("MainWindow", u"Gemini", None))
+        self.InsertValue_Frequency.setText("")
+        self.InsertValue_Frequency.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Enter a value...", None))
+        self.label_APIFreq.setText(QCoreApplication.translate("MainWindow", u"API Frequency:", None))
+        self.InsertValue_Key.setText("")
+        self.InsertValue_Key.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Enter a value...", None))
+        self.label_APIKey.setText(QCoreApplication.translate("MainWindow", u"API Key:", None))
+        self.GoogleTranslateButton.setText(QCoreApplication.translate("MainWindow", u"Google Translate", None))
+        self.GeminiButton.setText(QCoreApplication.translate("MainWindow", u"Gemini", None))
     # retranslateUi
 
