@@ -6,27 +6,15 @@ import ScreenMSS
 import translator
 import SettingsValues
 from UI_GUI import Ui_MainWindow
-
 class SettingsMode(QWidget):
     def __init__(self, GUI, parent=None):
         super().__init__(parent)
         self.GUI = GUI
-        self.GUI.GoogleTranslateButton.clicked.connect(self.GoogleTranslateButtonPressed)
-        self.GUI.GeminiButton.clicked.connect(self.GeminiButtonPressed)
-        self.GUI.saveSettingsButtons.accepted.connect(self.saveSettingsOK)
-        self.GUI.saveSettingsButtons.rejected.connect(self.saveSettingsCancel)
-        self.temporarySettings = SettingsValues.SettingsMode()
-    
-    def GoogleTranslateButtonPressed(self):
-        self.temporarySettings.translationMode = 'GoogleTranslate'
-        self.GUI.stackedWidget_2.setCurrentIndex(0)
-    
-    def GeminiButtonPressed(self):
-        self.temporarySettings.translationMode = 'GeminiTranslate'
-        self.GUI.stackedWidget_2.setCurrentIndex(1)
+        #self.temporarySettings = SettingsValues.SettingsMode()
+        self.temporarySettings = SettingsValues.copy.copy(SettingsValues.settings)
     
     def saveSettingsOK(self):
-        if self.GUI.stackedWidget_2.currentIndex() == 1:
+        if self.GUI.GeminiButton.isChecked():
             if not self.GUI.InsertValue_Key.text() or not self.GUI.InsertValue_Frequency.text():
                 print("Inputs cannot be empty! Please enter a value!")
                 return
@@ -36,21 +24,63 @@ class SettingsMode(QWidget):
             else:
                 self.temporarySettings.keyAPI = self.GUI.InsertValue_Key.text()
                 self.temporarySettings.frequencyAPI = int(self.GUI.InsertValue_Frequency.text())
+       
         SettingsValues.settings = SettingsValues.copy.copy(self.temporarySettings)
 
     def saveSettingsCancel(self):
         self.GUI.stackedWidget.setCurrentIndex(0)
 
-    def loadSettings(self):
-        if SettingsValues.settings.translationMode == 'GoogleTranslate':
-            self.GUI.GoogleTranslateButton.setChecked(True)
+    ###
+    def loadSnippingSettings(self):
+        self.GUI.radioButtonRealtime.setChecked(True) if self.temporarySettings.snippingMode == 'RealTime' else self.GUI.radioButtonSingleFrame.setChecked(True)
+        self.GUI.stackedWidgetSettings.setCurrentIndex(0)
+    
+    def RealTimeButtonPressed(self):
+        self.temporarySettings.snippingMode = 'RealTime'
+
+    def SingleFrameButtonPressed(self):
+        self.temporarySettings.snippingMode = 'SingleFrame'
+    
+    ###
+    def loadTranslationSettings(self):
+        if self.temporarySettings.translationMode == 'GoogleTranslate':
+            self.GUI.GoogleTranslateButton.setChecked(True)            
             self.GoogleTranslateButtonPressed()
-        elif SettingsValues.settings.translationMode == "GeminiTranslate":
+        elif self.temporarySettings.translationMode == "GeminiTranslate":
             self.GUI.GeminiButton.setChecked(True)
             self.GeminiButtonPressed()
-        
+
         self.GUI.InsertValue_Key.setText(SettingsValues.settings.keyAPI)
         self.GUI.InsertValue_Frequency.setText(str(SettingsValues.settings.frequencyAPI))
+        self.GUI.stackedWidgetSettings.setCurrentIndex(1)
+    
+    def GoogleTranslateButtonPressed(self):
+        self.temporarySettings.translationMode = 'GoogleTranslate'
+        self.GUI.stackedWidgetGemini.setCurrentIndex(0)
+    
+    def GeminiButtonPressed(self):
+        self.temporarySettings.translationMode = 'GeminiTranslate'
+        self.GUI.stackedWidgetGemini.setCurrentIndex(1)
+
+    ###
+    def loadLanguageSettings(self):
+        self.GUI.stackedWidgetSettings.setCurrentIndex(2)
+
+    def startSettingsWidget(self):
+        self.GUI.radioButtonRealtime.setChecked(True) if SettingsValues.settings.snippingMode == 'RealTime' else self.GUI.radioButtonSingleFrame.setChecked(True)
+
+        self.GUI.stackedWidgetSettings.setCurrentIndex(0)
+        self.GUI.pushButton_SnipMode.clicked.connect(self.loadSnippingSettings)
+        self.GUI.pushButton_TranslationSettings.clicked.connect(self.loadTranslationSettings)
+        self.GUI.pushButton_LanguageSettings.clicked.connect(self.loadLanguageSettings)
+
+        self.GUI.radioButtonRealtime.clicked.connect(self.RealTimeButtonPressed)
+        self.GUI.radioButtonSingleFrame.clicked.connect(self.SingleFrameButtonPressed)
+        self.GUI.GoogleTranslateButton.clicked.connect(self.GoogleTranslateButtonPressed)
+        self.GUI.GeminiButton.clicked.connect(self.GeminiButtonPressed)
+
+        self.GUI.saveSettingsButtons.accepted.connect(self.saveSettingsOK)
+        self.GUI.saveSettingsButtons.rejected.connect(self.saveSettingsCancel)
 
 class SnippedArea(QWidget):
     def __init__(self, parent=None):
@@ -86,9 +116,9 @@ class SnippedArea(QWidget):
         draggedArea.drawRect(self.area)
 
 class SnippingMode(QWidget):
-    def __init__(self, parent=None):
+    def __init__(self, GUI, parent=None):
         super().__init__(parent)
-        
+        self.GUI = GUI
         self.setWindowFlags(Qt.FramelessWindowHint)
         self.setAttribute(Qt.WA_TranslucentBackground)
         self.setCursor(Qt.CrossCursor)
@@ -100,7 +130,7 @@ class SnippingMode(QWidget):
         self.positionEnd = None
         self.area = None
         self.showFullScreen()
-        self.closeWidget()
+        self.closeWidgetIfExists()
 
     def mousePressEvent(self, event):
         if event.button() == Qt.LeftButton:
@@ -119,6 +149,7 @@ class SnippingMode(QWidget):
             self.close()
             self.snippedObject = SnippedArea()
             self.snippedObject.getCoords(self.area, QRect(self.positionStart, self.positionEnd).normalized().getCoords())
+            self.GUI.SnipButton.setText("Stop Snip")
 
     def paintEvent(self, event):
         draggedArea = QPainter(self)
@@ -129,9 +160,12 @@ class SnippingMode(QWidget):
             draggedArea.setPen(Qt.green)
             draggedArea.drawRect(self.area)
 
-    def closeWidget(self):
+    def closeWidgetIfExists(self):
         if(self.snippedObject is not None):
             self.snippedObject.close()
+            self.snippedObject = None
+            self.GUI.SnipButton.setText("New Snip")
+            self.close()
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -140,19 +174,20 @@ class MainWindow(QMainWindow):
         self.GUI = Ui_MainWindow()
         self.GUI.setupUi(self)
         self.GUI.stackedWidget.setCurrentIndex(0)
-        self.snippingWidget = SnippingMode()
+        self.snippingWidget = SnippingMode(self.GUI)
         self.GUI.SnipButton.clicked.connect(self.snipButton)
         self.GUI.SettingsButton.clicked.connect(self.settingsButton)
+
     def snipButton(self):
         self.snippingWidget.startWidget()
 
-        
     def settingsButton(self):
         self.settingsWidget = SettingsMode(self.GUI)
         self.GUI.stackedWidget.setCurrentIndex(1)
-        self.settingsWidget.loadSettings()
+        self.settingsWidget.startSettingsWidget()
+
     def closeEvent(self, event):
-        self.snippingWidget.closeWidget()
+        self.snippingWidget.closeWidgetIfExists()
         return super().closeEvent(event)
 
         
